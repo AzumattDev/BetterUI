@@ -58,8 +58,7 @@ For Questions or Comments, find me in my discord:
 
 ## Changelog
 
-- Updated for Bog Witch.
-- Automatically disable custom tooltips if Epic Loot is found. Change the description of the config option to match this.
+- Update for Valheim latest update (0.220.3)
 
 Full Changelog can be found on the wiki tab for this mod here: [https://valheim.thunderstore.io/package/BetterUI_ForeverMaintained/BetterUI_ForeverMaintained/wiki/](https://valheim.thunderstore.io/package/BetterUI_ForeverMaintained/BetterUI_ForeverMaintained/wiki/)
 

@@ -100,7 +100,7 @@ namespace BetterUI.GameClasses
                 Player.m_localPlayer.Message(MessageHud.MessageType.Center, $"Now editing: {(Groups)activeLayer}");
             }
 
-            float gameScale = GameObject.Find("LoadingGUI").GetComponent<CanvasScaler>().scaleFactor;
+            float gameScale = GuiScaler.m_largeGuiScale;
 
             Vector3 mousePos = Input.mousePosition; // Select element / move element
             float scrollPos = Input.GetAxis("Mouse ScrollWheel"); // Change scale

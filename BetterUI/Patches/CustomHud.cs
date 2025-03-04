@@ -210,7 +210,7 @@ internal static class CustomHud
             {
                 if (e.Group == Groups.Inventory)
                 {
-                    float gameScale = GameObject.Find("LoadingGUI").GetComponent<CanvasScaler>().scaleFactor;
+                    float gameScale = GuiScaler.m_largeGuiScale;
                     //Helpers.DebugLine($"\n{e.GetPosition()}\n{gameScale}\n{Camera.main.ViewportToScreenPoint(e.GetAnchorMin())}\n{tt.position}");
                     //Helpers.DebugLine($"\n{e.GetPosition() / gameScale}");
                     // Original object are moved by anchors
