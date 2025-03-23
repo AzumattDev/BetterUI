@@ -36,7 +36,8 @@ internal static class CustomHud
         new Element(CustomBars.FoodBar.objectName, Groups.HudRoot, CustomBars.FoodBar.objectName, "Food Bar"),
         new Element(CustomBars.StaminaBar.objectName, Groups.HudRoot, CustomBars.StaminaBar.objectName, "Stamina Bar"),
         new Element(CustomBars.EitrBar.objectName, Groups.HudRoot, CustomBars.EitrBar.objectName, "Eitr Bar"),
-        new Element("QuickSlots", Groups.HudRoot, "QuickSlotsHotkeyBar", "QuickSlots")
+        new Element("QuickSlots", Groups.HudRoot, "QuickSlotsHotkeyBar", "QuickSlots"),
+        new Element("BossHud", Groups.HudRoot, "EnemyHud/HudRoot/HudBaseBoss", "Boss Health Bar"),
         //new Element("QuickSlotsHotkeyBar", Groups.HudRoot, "healthpanel/Health/QuickSlotsHotkeyBar", "QuickSlotsHotkey"),
         //new Element("QuickSlotGrid", Groups.Inventory, "Player/QuickSlotGrid", "QuickSlots"),
         //new Element("EquipmentSlotGrid", Groups.Inventory, "Player/EquipmentSlotGrid", "EquipmentSlots"),
@@ -47,6 +48,7 @@ internal static class CustomHud
     {
         try
         {
+            Helpers.DebugLine("CustomHud Load started");
             hudRoot = hud.transform.Find("hudroot");
             invRoot = InventoryGui.instance.transform.Find("root"); // Issue, this element is hidden when inventory is closed
             baseRoot = MessageHud.instance.transform; // This layer will be projected over other UI elements
@@ -85,7 +87,7 @@ internal static class CustomHud
                     // Element does not exist in users uiData, add it.
                     if (!elements.Exists(he => he.Name == e.Name))
                     {
-                        Helpers.DebugLine($"Adding to elements: {e.Name}");
+                        Helpers.DebugLine($"Adding to elements: {e.Name} with path: {e.LocationPath}");
                         elements.Add(new HudElement(e.Name, e.DisplayName, e.Group, e.LocationPath, Vector2.zero));
 
                         if (elements.Count == supportedElements.Length) break;
@@ -203,11 +205,38 @@ internal static class CustomHud
     {
         try
         {
-            RectTransform rt = LocateRectTransform(e.Group, e.Path); // Original object
-            RectTransform tt = LocateTemplateRect(e.Name); // Your generated template
+            RectTransform rt = LocateRectTransform(e.Group, e.Path);
+            RectTransform tt = LocateTemplateRect(e.Name);
             //Helpers.DebugLine($"{rt} {rt.anchorMin} {e.GetPosition()}");
             if (rt)
             {
+                // Add special handling for BossHud
+                if (e.Name == "BossHud")
+                {
+                    // Update the original template that gets cloned
+                    rt.anchoredPosition = e.Position;
+                    rt.localScale = new Vector3(e.Scale * e.XDimensions, e.Scale * e.YDimensions);
+
+                    // Update any existing boss huds in the scene
+                    EnemyHud enemyHud = EnemyHud.m_instance;
+                    if (enemyHud != null)
+                    {
+                        foreach (var hudPair in enemyHud.m_huds)
+                        {
+                            if (hudPair.Key.IsBoss())
+                            {
+                                var bossRT = hudPair.Value.m_gui.GetComponent<RectTransform>();
+                                if (bossRT)
+                                {
+                                    bossRT.anchoredPosition = e.Position;
+                                    bossRT.localScale = new Vector3(e.Scale * e.XDimensions, e.Scale * e.YDimensions);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Existing positioning code
                 if (e.Group == Groups.Inventory)
                 {
                     float gameScale = GuiScaler.m_largeGuiScale;
@@ -242,8 +271,23 @@ internal static class CustomHud
         try
         {
             roots.TryGetValue(group, out Transform parent);
+
             // We change parent to Inventory root
-            if (group == Groups.Inventory) parent = InventoryGui.instance.transform.Find("root");
+            if (group == Groups.Inventory)
+            {
+                parent = InventoryGui.instance.transform.Find("root");
+            }
+
+            // Special case for BossHud
+            if (path.StartsWith("EnemyHud/"))
+            {
+                Transform ingameGui = hudRoot.parent.parent;
+                Transform enemyHud = ingameGui.Find(path);
+                if (enemyHud != null)
+                {
+                    return enemyHud.GetComponent<RectTransform>();
+                }
+            }
 
             return parent.Find(path).GetComponent<RectTransform>();
         }
@@ -273,12 +317,19 @@ internal static class CustomHud
 
     private static void CreateTemplates()
     {
+        Helpers.DebugLine($"Starting CreateTemplates with {elements.Count} elements");
         List<HudElement> unusedElements = new List<HudElement>();
         foreach (HudElement e in elements)
         {
             try
             {
+                Helpers.DebugLine($"Creating template for {e.Name} with path {e.Path}");
                 RectTransform rt = LocateRectTransform(e.Group, e.Path);
+                if (rt == null)
+                {
+                    Helpers.DebugLine($"Failed to locate RectTransform for {e.Name}", true, true);
+                    continue;
+                }
                 if (e.Position == Vector2.zero)
                 {
                     if (e.Group == Groups.Inventory)
@@ -296,8 +347,9 @@ internal static class CustomHud
 
                 AddTemplateToHud(e, rt);
             }
-            catch
+            catch (Exception ex)
             {
+                Helpers.DebugLine($"Failed to create template for {e.Name}: {ex.Message}");
                 unusedElements.Add(e);
             }
         }
@@ -316,32 +368,41 @@ internal static class CustomHud
 
     private static void AddTemplateToHud(HudElement element, RectTransform rt)
     {
-        // Should we add these to their own elements? Based on their group?
-        // roots.TryGetValue(Groups.HudRoot, out Transform templateRoot); // Everything on hudRoot
-        // roots.TryGetValue(element.group, out Transform templateRoot);
+        try
+        {
+            Helpers.DebugLine($"Creating template for: {element.Name}");
 
-        Transform go = UnityEngine.Object.Instantiate(hudRoot.Find("BuildHud/SelectedInfo"), baseRoot);
-        go.gameObject.name = $"{element.Name}{templateSuffix}";
-        go.Find("selected_piece").gameObject.SetActive(false);
-        go.Find("requirements").gameObject.SetActive(false);
+            Transform go = UnityEngine.Object.Instantiate(hudRoot.Find("BuildHud/SelectedInfo"), baseRoot);
+            go.gameObject.name = $"{element.Name}{templateSuffix}";
+            Helpers.DebugLine($"Created template object: {go.gameObject.name}");
 
-        TextMeshProUGUI t = go.gameObject.AddComponent<TextMeshProUGUI>();
-        t.text = $"{element.DisplayName}";
-        t.font = Hud.instance.m_pieceDescription.font;
-        t.fontSize = 20;
-        t.alignment = TextAlignmentOptions.CenterGeoAligned;
-        go.gameObject.SetActive(false); // Have it hidden when added
+            go.Find("selected_piece").gameObject.SetActive(false);
+            go.Find("requirements").gameObject.SetActive(false);
 
-        RectTransform templateRT = go.GetComponent<RectTransform>();
-        templateRT.pivot = rt.pivot;
-        templateRT.anchorMin = rt.anchorMin;
-        templateRT.anchorMax = rt.anchorMax;
-        templateRT.offsetMin = rt.offsetMin;
-        templateRT.offsetMax = rt.offsetMax;
-        templateRT.sizeDelta = rt.sizeDelta;
-        templateRT.anchoredPosition = rt.anchoredPosition;
-        templateRT.position = rt.position;
-        templateRT.localEulerAngles = rt.localEulerAngles;
-        t.enableAutoSizing = true;
+            TextMeshProUGUI t = go.gameObject.AddComponent<TextMeshProUGUI>();
+            t.text = $"{element.DisplayName}";
+            t.font = Hud.instance.m_pieceDescription.font;
+            t.fontSize = 20;
+            t.alignment = TextAlignmentOptions.CenterGeoAligned;
+            go.gameObject.SetActive(false); // Have it hidden when added
+
+            RectTransform templateRT = go.GetComponent<RectTransform>();
+            templateRT.pivot = rt.pivot;
+            templateRT.anchorMin = rt.anchorMin;
+            templateRT.anchorMax = rt.anchorMax;
+            templateRT.offsetMin = rt.offsetMin;
+            templateRT.offsetMax = rt.offsetMax;
+            templateRT.sizeDelta = rt.sizeDelta;
+            templateRT.anchoredPosition = rt.anchoredPosition;
+            templateRT.position = rt.position;
+            templateRT.localEulerAngles = rt.localEulerAngles;
+            t.enableAutoSizing = true;
+
+            Helpers.DebugLine($"Template setup complete for: {element.Name}");
+        }
+        catch (Exception ex)
+        {
+            Helpers.DebugLine($"Failed to create template for {element.Name}: {ex.Message}", true, true);
+        }
     }
 }

@@ -340,3 +340,7 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 *.zip
+/BetterUI/Package/plugins/0Harmony.xml
+/BetterUI/Package/plugins/BepInEx.xml
+/BetterUI/Package/plugins/MonoMod.RuntimeDetour.xml
+/BetterUI/Package/plugins/MonoMod.Utils.xml
