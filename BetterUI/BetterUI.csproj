@@ -29,33 +29,47 @@
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>$(GameDir)\BepInEx\core\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="assembly_googleanalytics_publicized">
       <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_googleanalytics_publicized.dll</HintPath>
-    </Reference>
+      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_googleanalytics_publicized.dll</HintPath>
+      <Private>False</Private>
+      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_guiutils_publicized.dll</HintPath>
     <Reference Include="assembly_guiutils_publicized">
       <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_guiutils_publicized.dll</HintPath>
-    </Reference>
-    <Reference Include="assembly_lux_publicized">
       <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_lux_publicized.dll</HintPath>
     </Reference>
-    <Reference Include="assembly_postprocessing_publicized">
+    <Reference Include="assembly_lux_publicized">
       <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_postprocessing_publicized.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="assembly_simplemeshcombine_publicized">
       <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_simplemeshcombine_publicized.dll</HintPath>
     </Reference>
-    <Reference Include="assembly_sunshafts_publicized">
+      <Private>False</Private>
       <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_sunshafts_publicized.dll</HintPath>
+    <Reference Include="assembly_simplemeshcombine_publicized">
+      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_simplemeshcombine_publicized.dll</HintPath>
+      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_utils_publicized.dll</HintPath>
+    </Reference>
+    <Reference Include="assembly_steamworks_publicized">
+      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_valheim_publicized.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+      <HintPath>$(GameDir)\BepInEx\core\BepInEx.dll</HintPath>
+      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_sunshafts_publicized.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="assembly_utils_publicized">
       <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_utils_publicized.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="assembly_valheim_publicized">
       <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_valheim_publicized.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="BepInEx">
       <HintPath>$(GameDir)\BepInEx\core\BepInEx.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Security">
       <HintPath>$(GameDir)\valheim_Data\Managed\Mono.Security.dll</HintPath>
@@ -227,7 +241,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextCoreModule">
-      <HintPath>$(GameDir)\valheim_Data\Managed\UnityEngine.TextCoreModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Valheim_dev\valheim_Data\Managed\UnityEngine.TextCoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
@@ -343,8 +357,9 @@
     <Compile Include="Patches\Menu.cs" />
     <Compile Include="Patches\ItemIconUpdater.cs" />
     <Compile Include="Patches\RPG.cs" />
-    <Compile Include="Patches\Skill.cs" />
-    <Compile Include="Patches\TextScaler.cs" />
+    <!-- <PostBuildEvent>xcopy "$(TargetDir)" "$(GameDir)\BepInEx\plugins\$(ProjectName)\" /q /s /y /i</PostBuildEvent> -->
+    <PostBuildEvent>
+    </PostBuildEvent>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Changelog.txt" />
     <Content Include="Package\icon.png" />
@@ -357,8 +372,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <!-- <PostBuildEvent>xcopy "$(TargetDir)" "$(GameDir)\BepInEx\plugins\$(ProjectName)\" /q /s /y /i</PostBuildEvent> -->
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetDir)" "$(GameDir)\BepInEx\plugins\$(ProjectName)\" /q /s /y /i</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetDir)" "C:\Users\crypt\AppData\Roaming\com.kesomannen.gale\valheim\profiles\AzuMods_All\BepInEx\plugins\$(ProjectName)\" /q /s /y /i</PostBuildEvent>
   </PropertyGroup>
 </Project>
