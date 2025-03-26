@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="GameDir.targets" />
@@ -31,31 +31,31 @@
       <HintPath>$(GameDir)\BepInEx\core\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
-      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_googleanalytics_publicized.dll</HintPath>
+    <Reference Include="assembly_googleanalytics_publicized">
       <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_googleanalytics_publicized.dll</HintPath>
       <Private>False</Private>
-      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_guiutils_publicized.dll</HintPath>
+    </Reference>
     <Reference Include="assembly_guiutils_publicized">
       <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_guiutils_publicized.dll</HintPath>
-      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_lux_publicized.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="assembly_lux_publicized">
+      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_lux_publicized.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="assembly_postprocessing_publicized">
       <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_postprocessing_publicized.dll</HintPath>
       <Private>False</Private>
     </Reference>
-      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_simplemeshcombine_publicized.dll</HintPath>
-    </Reference>
-      <Private>False</Private>
-      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_sunshafts_publicized.dll</HintPath>
     <Reference Include="assembly_simplemeshcombine_publicized">
       <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_simplemeshcombine_publicized.dll</HintPath>
-      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_utils_publicized.dll</HintPath>
-    </Reference>
-    <Reference Include="assembly_steamworks_publicized">
-      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_valheim_publicized.dll</HintPath>
       <Private>False</Private>
     </Reference>
-      <HintPath>$(GameDir)\BepInEx\core\BepInEx.dll</HintPath>
+    <Reference Include="assembly_steamworks_publicized">
+      <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_steamworks_publicized.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="assembly_sunshafts_publicized">
       <HintPath>$(GameDir)\valheim_Data\Managed\publicized_assemblies\assembly_sunshafts_publicized.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -241,7 +241,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextCoreModule">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Valheim_dev\valheim_Data\Managed\UnityEngine.TextCoreModule.dll</HintPath>
+      <HintPath>$(GameDir)\valheim_Data\Managed\UnityEngine.TextCoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
@@ -270,6 +270,10 @@
     </Reference>
     <Reference Include="UnityEngine.UmbraModule">
       <HintPath>$(GameDir)\valheim_Data\Managed\UnityEngine.UmbraModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UNETModule">
+      <HintPath>$(GameDir)\valheim_Data\Managed\UnityEngine.UNETModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UnityAnalyticsModule">
@@ -357,9 +361,8 @@
     <Compile Include="Patches\Menu.cs" />
     <Compile Include="Patches\ItemIconUpdater.cs" />
     <Compile Include="Patches\RPG.cs" />
-    <!-- <PostBuildEvent>xcopy "$(TargetDir)" "$(GameDir)\BepInEx\plugins\$(ProjectName)\" /q /s /y /i</PostBuildEvent> -->
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <Compile Include="Patches\Skill.cs" />
+    <Compile Include="Patches\TextScaler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Changelog.txt" />
     <Content Include="Package\icon.png" />
