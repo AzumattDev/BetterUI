@@ -747,7 +747,7 @@ static class BetterTooltip
          *  - Maxed item: qualityLevel >= m_shared.m_maxQuality
          *    - Show stats qualityLevel - 1.
          *  - Upgrading:
-         *    - Calculate diffrences.
+         *    - Calculate differences.
          */
 
         // Item has potential on upgrading, as is not max quality
@@ -789,7 +789,8 @@ static class BetterTooltip
             _sb.Append("\n");
         }
 
-        if (_item.m_shared.m_movementModifier != 0f) Movement();
+        localPlayer.AppendEquipmentModifierTooltips(_item, _sb);
+
 
         DamageModifiers();
 
@@ -824,7 +825,7 @@ static class BetterTooltip
                 _sb.Append("\n");
             }
 
-            if (_item.m_shared.m_movementModifier != 0f) Movement();
+            localPlayer.AppendEquipmentModifierTooltips(_item, _sb);
 
             DamageModifiers();
 

@@ -89,8 +89,7 @@ class SkillUI
         dialog.m_listRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
 
         // Devs added this, but forgot to render it...
-        /*
-        __instance.m_totalSkillText.text = string.Concat(new string[]
+        dialog.m_totalSkillText.text = string.Concat(new string[]
         {
             "<color=#ffa500ff>",
             player.GetSkills().GetTotalSkill().ToString("0"),
@@ -98,6 +97,5 @@ class SkillUI
             player.GetSkills().GetTotalSkillCap().ToString("0"),
             "</color>"
         });
-        */
     }
 }
