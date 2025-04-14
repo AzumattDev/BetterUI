@@ -58,7 +58,7 @@ For Questions or Comments, find me in my discord:
 
 ## Changelog
 
-- Update for Valheim latest update (0.220.3)
+- Fixed some tooltip stuff, boss hud PR accepted, skills dialog fixes
 
 Full Changelog can be found on the wiki tab for this mod here: [https://valheim.thunderstore.io/package/BetterUI_ForeverMaintained/BetterUI_ForeverMaintained/wiki/](https://valheim.thunderstore.io/package/BetterUI_ForeverMaintained/BetterUI_ForeverMaintained/wiki/)
 
