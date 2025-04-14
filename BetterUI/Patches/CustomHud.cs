@@ -36,7 +36,8 @@ internal static class CustomHud
         new Element(CustomBars.FoodBar.objectName, Groups.HudRoot, CustomBars.FoodBar.objectName, "Food Bar"),
         new Element(CustomBars.StaminaBar.objectName, Groups.HudRoot, CustomBars.StaminaBar.objectName, "Stamina Bar"),
         new Element(CustomBars.EitrBar.objectName, Groups.HudRoot, CustomBars.EitrBar.objectName, "Eitr Bar"),
-        new Element("QuickSlots", Groups.HudRoot, "QuickSlotsHotkeyBar", "QuickSlots")
+        new Element("QuickSlots", Groups.HudRoot, "QuickSlotsHotkeyBar", "QuickSlots"),
+        new Element("BossHud", Groups.HudRoot, "EnemyHud/HudRoot/HudBaseBoss", "Boss Health Bar")
         //new Element("QuickSlotsHotkeyBar", Groups.HudRoot, "healthpanel/Health/QuickSlotsHotkeyBar", "QuickSlotsHotkey"),
         //new Element("QuickSlotGrid", Groups.Inventory, "Player/QuickSlotGrid", "QuickSlots"),
         //new Element("EquipmentSlotGrid", Groups.Inventory, "Player/EquipmentSlotGrid", "EquipmentSlots"),
@@ -85,7 +86,7 @@ internal static class CustomHud
                     // Element does not exist in users uiData, add it.
                     if (!elements.Exists(he => he.Name == e.Name))
                     {
-                        Helpers.DebugLine($"Adding to elements: {e.Name}");
+                        Helpers.DebugLine($"Adding to elements: {e.Name} with path: {e.LocationPath}");
                         elements.Add(new HudElement(e.Name, e.DisplayName, e.Group, e.LocationPath, Vector2.zero));
 
                         if (elements.Count == supportedElements.Length) break;
@@ -208,6 +209,32 @@ internal static class CustomHud
             //Helpers.DebugLine($"{rt} {rt.anchorMin} {e.GetPosition()}");
             if (rt)
             {
+                // Add special handling for BossHud
+                if (e.Name == "BossHud")
+                {
+                    // Update the original template that gets cloned
+                    rt.anchoredPosition = e.Position;
+                    rt.localScale = new Vector3(e.Scale * e.XDimensions, e.Scale * e.YDimensions);
+
+                    // Update any existing boss huds in the scene
+                    EnemyHud enemyHud = EnemyHud.m_instance;
+                    if (enemyHud != null)
+                    {
+                        foreach (var hudPair in enemyHud.m_huds)
+                        {
+                            if (hudPair.Key.IsBoss())
+                            {
+                                var bossRT = hudPair.Value.m_gui.GetComponent<RectTransform>();
+                                if (bossRT)
+                                {
+                                    bossRT.anchoredPosition = e.Position;
+                                    bossRT.localScale = new Vector3(e.Scale * e.XDimensions, e.Scale * e.YDimensions);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (e.Group == Groups.Inventory)
                 {
                     float gameScale = GuiScaler.m_largeGuiScale;
@@ -244,6 +271,17 @@ internal static class CustomHud
             roots.TryGetValue(group, out Transform parent);
             // We change parent to Inventory root
             if (group == Groups.Inventory) parent = InventoryGui.instance.transform.Find("root");
+
+            // Special case for BossHud
+            if (path.StartsWith("EnemyHud/"))
+            {
+                Transform ingameGui = hudRoot.parent.parent;
+                Transform enemyHud = ingameGui.Find(path);
+                if (enemyHud != null)
+                {
+                    return enemyHud.GetComponent<RectTransform>();
+                }
+            }
 
             return parent.Find(path).GetComponent<RectTransform>();
         }
