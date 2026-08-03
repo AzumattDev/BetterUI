@@ -22,7 +22,7 @@ For Questions or Comments, find me in my discord:
 
 #### Customizable Player HUD
  - Makes player HUD elements movemable
- - Custom Health, Food, Stamina, and Eitr bars that can be rotated and resized
+ - Custom Health, Food, Stamina, Eitr, and Adrenaline bars that can be rotated and resized
  - Adjust text sizes
 
 #### Customized Iventory Icons

@@ -36,6 +36,7 @@ internal static class CustomHud
         new Element(CustomBars.FoodBar.objectName, Groups.HudRoot, CustomBars.FoodBar.objectName, "Food Bar"),
         new Element(CustomBars.StaminaBar.objectName, Groups.HudRoot, CustomBars.StaminaBar.objectName, "Stamina Bar"),
         new Element(CustomBars.EitrBar.objectName, Groups.HudRoot, CustomBars.EitrBar.objectName, "Eitr Bar"),
+        new Element(CustomBars.AdrenalineBar.objectName, Groups.HudRoot, CustomBars.AdrenalineBar.objectName, "Adrenaline Bar"),
         new Element("QuickSlots", Groups.HudRoot, "QuickSlotsHotkeyBar", "QuickSlots"),
         new Element("BossHud", Groups.HudRoot, "EnemyHud/HudRoot/HudBaseBoss", "Boss Health Bar")
         //new Element("QuickSlotsHotkeyBar", Groups.HudRoot, "healthpanel/Health/QuickSlotsHotkeyBar", "QuickSlotsHotkey"),

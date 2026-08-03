@@ -68,8 +68,10 @@ internal class CustomBars
 
         public static void StaminaStyleUpdate(float max, float current, ref GuiBar slowBar, ref GuiBar fastBar, ref TMP_Text barText)
         {
-            fastBar.SetValue(current / max);
-            slowBar.SetValue(current / max);
+            float fill = max > 0f ? current / max : 0f;
+
+            fastBar.SetValue(fill);
+            slowBar.SetValue(fill);
 
             barText.fontSize = Main.customBarTextSize.Value;
             barText.text = $"{Mathf.CeilToInt(current)}/{Mathf.CeilToInt(max)}";
@@ -262,7 +264,7 @@ internal class CustomBars
         {
             try
             {
-                BarHelper.BaseCreate("BetterUI_EitrBar", "eitrpanel", ref root, ref slowBar, ref fastBar, ref barText);
+                BarHelper.BaseCreate(objectName, "eitrpanel", ref root, ref slowBar, ref fastBar, ref barText);
                 UpdateRotation();
 
                 fastBar.m_originalColor = Hud.instance.m_eitrBarFast.m_bar.GetComponent<Image>().color;
@@ -313,6 +315,89 @@ internal class CustomBars
             catch (Exception e)
             {
                 BetterUI.Main.log.LogError($"{nameof(EitrBar)}.{nameof(Update)}() {e.Message} {e.StackTrace}");
+            }
+        }
+    }
+
+    public static class AdrenalineBar
+    {
+        public const string objectName = "BetterUI_AdrenalineBar";
+        internal static RectTransform root;
+        internal static GuiBar slowBar;
+        internal static GuiBar fastBar;
+        internal static TMP_Text barText;
+
+        public static void UpdateRotation()
+        {
+            if (root == null || Main.customAdrenalineBar.Value == Main.CustomBarState.off)
+            {
+                return;
+            }
+
+            BarHelper.UpdateRotation((int)Main.customAdrenalineBar.Value, ref root, ref barText);
+        }
+
+        public static void Create()
+        {
+            try
+            {
+                BarHelper.BaseCreate(objectName, "adrenalinepanel", ref root, ref slowBar, ref fastBar, ref barText);
+                UpdateRotation();
+
+                fastBar.m_originalColor = Hud.instance.m_adrenalineBarFast.m_bar.GetComponent<Image>().color;
+                slowBar.m_originalColor = Hud.instance.m_adrenalineBarSlow.m_bar.GetComponent<Image>().color;
+                fastBar.ResetColor();
+                slowBar.ResetColor();
+
+                fastBar.m_smoothDrain = Hud.instance.m_adrenalineBarFast.m_smoothDrain;
+                fastBar.m_changeDelay = Hud.instance.m_adrenalineBarFast.m_changeDelay;
+                fastBar.m_smoothSpeed = Hud.instance.m_adrenalineBarFast.m_smoothSpeed;
+
+                // go to a good default position that can get overriden by the editing feature if needed
+                // go left
+                root.position -= new Vector3(BarHelper.StepSize / 4, 0);
+
+                if (Main.customHealthBar.Value != Main.CustomBarState.off)
+                {
+                    // hold position
+                    root.position -= new Vector3(0, BarHelper.padding);
+
+                    if (Main.customStaminaBar.Value != Main.CustomBarState.off)
+                    {
+                        // go down
+                        root.position -= new Vector3(0, BarHelper.StepSize / 4 + BarHelper.padding);
+                    }
+
+                    if (Main.customEitrBar.Value != Main.CustomBarState.off)
+                    {
+                        // go down
+                        root.position -= new Vector3(0, BarHelper.StepSize / 4 + BarHelper.padding);
+                    }
+                }
+                else
+                {
+                    // go up
+                    root.position += new Vector3(0, BarHelper.StepSize / 4);
+                }
+            }
+            catch (Exception e)
+            {
+                BetterUI.Main.log.LogError($"{nameof(AdrenalineBar)}.{nameof(Create)}() {e.Message} {e.StackTrace}");
+            }
+        }
+
+        public static void Update(float max, float current)
+        {
+            try
+            {
+                if (root != null)
+                {
+                    BarHelper.StaminaStyleUpdate(max, current, ref slowBar, ref fastBar, ref barText);
+                }
+            }
+            catch (Exception e)
+            {
+                BetterUI.Main.log.LogError($"{nameof(AdrenalineBar)}.{nameof(Update)}() {e.Message} {e.StackTrace}");
             }
         }
     }

@@ -21,7 +21,7 @@ namespace BetterUI
           MODNAME = "BetterUI",
           AUTHOR = "MK",
           GUID = AUTHOR + "_" + MODNAME,
-          VERSION = "2.5.9";
+          VERSION = "2.5.10";
 
         internal static ManualLogSource log;
         internal readonly Harmony harmony;
@@ -36,6 +36,7 @@ namespace BetterUI
         public static ConfigEntry<CustomBarState> customHealthBar;
         public static ConfigEntry<CustomBarState> customStaminaBar;
         public static ConfigEntry<CustomBarState> customEitrBar;
+        public static ConfigEntry<CustomBarState> customAdrenalineBar;
         public static ConfigEntry<CustomBarState> customFoodBar;
         public static ConfigEntry<int> customBarTextSize;
         public static ConfigEntry<int> customFoodBarTextSize;
@@ -164,6 +165,9 @@ namespace BetterUI
             customEitrBar = Config.Bind(sectionName, nameof(customEitrBar), eitrDefault ? CustomBarState.on0Degrees : CustomBarState.off, "Resizable, rotatable eitr bar. If you don't know what this is yet, just keep it disabled. This bar will always be visible and will not get longer when you eat.");
             customEitrBar.SettingChanged += (_, _) => CustomEitrBar_SettingChanged();
             RemoveOldConfigValue<int>(new ConfigDefinition(sectionName, "customSpoilerBarRotation"));
+
+            customAdrenalineBar = Config.Bind(sectionName, nameof(customAdrenalineBar), CustomBarState.off, "Resizable, rotatable adrenaline bar. If you don't know what this is yet, just keep it disabled. This bar will always be visible and will not get longer when you eat.");
+            customAdrenalineBar.SettingChanged += (_, _) => CustomAdrenalineBar_SettingChanged();
 
             //
             // Character Inventory
@@ -357,6 +361,11 @@ namespace BetterUI
         private void CustomEitrBar_SettingChanged()
         {
             Patches.CustomBars.EitrBar.UpdateRotation();
+        }
+
+        private void CustomAdrenalineBar_SettingChanged()
+        {
+            Patches.CustomBars.AdrenalineBar.UpdateRotation();
         }
 
         public void Start()

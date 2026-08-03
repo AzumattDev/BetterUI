@@ -48,6 +48,11 @@ namespace BetterUI.GameClasses
                 CustomBars.EitrBar.Create();
             }
 
+            if (Main.customAdrenalineBar.Value != Main.CustomBarState.off)
+            {
+                CustomBars.AdrenalineBar.Create();
+            }
+
             if (Main.customFoodBar.Value != Main.CustomBarState.off)
             {
                 CustomBars.FoodBar.Create();
@@ -167,6 +172,10 @@ namespace BetterUI.GameClasses
                                 entry = Main.customEitrBar;
                                 break;
 
+                            case CustomBars.AdrenalineBar.objectName:
+                                entry = Main.customAdrenalineBar;
+                                break;
+
                             default:
                                 break;
                         }
@@ -228,6 +237,14 @@ namespace BetterUI.GameClasses
         {
             // the class will decide if it should do something, ignore config values here
             CustomBars.EitrBar.Update(player.GetMaxEitr(), player.GetEitr());
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(Hud), "UpdateAdrenaline")]
+        private static void UpdateAdrenaline(Player player)
+        {
+            // the class will decide if it should do something, ignore config values here
+            CustomBars.AdrenalineBar.Update(player.GetMaxAdrenaline(), player.GetAdrenaline());
         }
 
         [HarmonyPostfix]
