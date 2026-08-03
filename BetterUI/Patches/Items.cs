@@ -330,7 +330,7 @@ static class BetterTooltip
 
     private static void Crafted()
     {
-        _sb.AppendFormat("\n$item_crafter: <color=#ffa500ff>{0}</color>", _item.m_crafterName);
+        _sb.AppendFormat("\n$item_crafter: <color=#ffa500ff>{0}</color>", CensorShittyWords.FilterUGC(_item.m_crafterName, UGCType.CharacterName, _item.m_crafterID));
     }
 
     private static void CustomDamageCalculations(int newLvl, int oldLvl)
@@ -402,6 +402,96 @@ static class BetterTooltip
         _sb.Append("\n<color=#00ffffff>$item_dlc</color>");
     }
 
+    private static void NewGamePlus()
+    {
+        string level = _item.m_worldLevel != 1 ? _item.m_worldLevel.ToString() : string.Empty;
+        _sb.AppendFormat("\n<color=#ffa500ff>$item_newgameplusitem {0}</color>", level);
+    }
+
+    private static void Subtitle()
+    {
+        _sb.AppendFormat("\n<color=#ffa500ff>{0}</color>", _item.m_shared.m_subtitle);
+    }
+
+    private static void AttackStats()
+    {
+        Attack attack = _item.m_shared.m_attack;
+
+        if (attack.m_damageMultiplierByTotalHealthMissing > 0f)
+        {
+            _sb.AppendFormat("\n$item_damagemultipliertotal: <color=#ffa500ff>{0}%</color>", attack.m_damageMultiplierByTotalHealthMissing * 100f);
+        }
+
+        if (attack.m_damageMultiplierPerMissingHP > 0f)
+        {
+            _sb.AppendFormat("\n$item_damagemultiplierhp: <color=#ffa500ff>{0}%</color>", attack.m_damageMultiplierPerMissingHP * 100f);
+        }
+
+        if (attack.m_attackStamina > 0f)
+        {
+            _sb.AppendFormat("\n$item_staminause: <color=#ffa500ff>{0}</color>", attack.m_attackStamina);
+        }
+
+        if (attack.m_attackEitr > 0f)
+        {
+            _sb.AppendFormat("\n$item_eitruse: <color=#ffa500ff>{0}</color>", attack.m_attackEitr);
+        }
+
+        if (attack.m_attackHealth > 0f)
+        {
+            _sb.AppendFormat("\n$item_healthuse: <color=#ffa500ff>{0}</color>", attack.m_attackHealth);
+        }
+
+        if (attack.m_attackHealthReturnHit > 0f)
+        {
+            _sb.AppendFormat("\n$item_healthhitreturn: <color=#ffa500ff>{0}</color>", attack.m_attackHealthReturnHit);
+        }
+
+        if (attack.m_attackHealthPercentage > 0f)
+        {
+            _sb.AppendFormat("\n$item_healthuse: <color=#ffa500ff>{0}%</color>", attack.m_attackHealthPercentage.ToString("0.0"));
+        }
+
+        if (attack.m_drawStaminaDrain > 0f)
+        {
+            _sb.AppendFormat("\n$item_staminahold: <color=#ffa500ff>{0}</color>/s", attack.m_drawStaminaDrain);
+        }
+    }
+
+    private static void ParryAdrenaline()
+    {
+        if (_item.m_shared.m_perfectBlockAdrenaline > 0f)
+        {
+            _sb.AppendFormat("\n$item_parryadrenaline: <color=#ffa500ff>{0}</color>", _item.m_shared.m_perfectBlockAdrenaline);
+        }
+    }
+
+    private static void TamedOnly()
+    {
+        if (_item.m_shared.m_tamedOnly)
+        {
+            _sb.Append("\n<color=#ffa500ff>$item_tamedonly</color>");
+        }
+    }
+
+    private static void EitrRegen(Player localPlayer)
+    {
+        if (_item.m_shared.m_eitrRegenModifier > 0f && localPlayer != null)
+        {
+            _sb.AppendFormat("\n$item_eitrregen_modifier: <color=#ffa500ff>{0}%</color> ($item_total:<color=#ffff00ff>{1}%</color>)",
+                (_item.m_shared.m_eitrRegenModifier * 100f).ToString("+0;-0"),
+                (localPlayer.GetEquipmentEitrRegenModifier() * 100f).ToString("+0;-0"));
+        }
+    }
+
+    private static void FullAdrenaline()
+    {
+        if (_item.m_shared.m_fullAdrenalineSE != null)
+        {
+            _sb.AppendFormat("\n$item_fulladrenaline: <color=#ffa500ff>{0}</color>", _item.m_shared.m_fullAdrenalineSE.GetTooltipString());
+        }
+    }
+
     private static void Durability(int qualityLevel, bool crafting)
     {
         if (crafting)
@@ -434,42 +524,61 @@ static class BetterTooltip
         }
     }
 
-    private static void ItemType(int qualityLevel, float skillLevel)
+    private static bool FoodStats(ItemDrop.ItemData item, Player localPlayer)
+    {
+        ItemDrop.ItemData.SharedData shared = item.m_shared;
+
+        if (shared.m_food <= 0f && shared.m_foodStamina <= 0f && shared.m_foodEitr <= 0f)
+        {
+            return false;
+        }
+
+        // the "current" values are the player's current maximums, so they can compare before eating
+        if (shared.m_food > 0f)
+        {
+            _sb.AppendFormat("\n$item_food_health: <color=#ff0000ff>{0}</color>  ($item_current:<color=#ffff00ff>{1}</color>)", shared.m_food, localPlayer != null ? localPlayer.GetMaxHealth().ToString("0") : "?");
+        }
+
+        if (shared.m_foodStamina > 0f)
+        {
+            _sb.AppendFormat("\n$item_food_stamina: <color=#ffff00ff>{0}</color>  ($item_current:<color=#ffff00ff>{1}</color>)", shared.m_foodStamina, localPlayer != null ? localPlayer.GetMaxStamina().ToString("0") : "?");
+        }
+
+        if (shared.m_foodEitr > 0f)
+        {
+            _sb.AppendFormat("\n$item_food_eitr: <color=#00ffffff>{0}</color>  ($item_current:<color=#ffff00ff>{1}</color>)", shared.m_foodEitr, localPlayer != null ? localPlayer.GetMaxEitr().ToString("0") : "?");
+        }
+
+        _sb.AppendFormat("\n$item_food_duration: <color=#ffa500ff>{0}</color>", ItemDrop.ItemData.GetDurationString(shared.m_foodBurnTime));
+
+        if (shared.m_foodRegen > 0f)
+        {
+            _sb.AppendFormat("\n$item_food_regen: <color=#ffa500ff>{0} hp/tick</color>", shared.m_foodRegen);
+        }
+
+        return true;
+    }
+
+    private static void ItemType(int qualityLevel, Player localPlayer)
     {
         switch (_item.m_shared.m_itemType)
         {
             case ItemDrop.ItemData.ItemType.Consumable:
             {
-                if (_item.m_shared.m_food > 0f)
-                {
-                    _sb.AppendFormat("\n$item_food_health: <color=#ff0000ff>{0}</color>", _item.m_shared.m_food);
-                    _sb.AppendFormat("\n$item_food_stamina: <color=#ffff00ff>{0}</color>", _item.m_shared.m_foodStamina);
-                    if (_item.m_shared.m_foodEitr > 0f)
-                    {
-                        _sb.AppendFormat("\n$item_food_eitr: <color=#00ffffff>{0}</color>", _item.m_shared.m_foodEitr);
-                    }
-
-                    _sb.AppendFormat("\n$item_food_duration: <color=#ffa500ff>{0}s ({1}m)</color>", _item.m_shared.m_foodBurnTime, (_item.m_shared.m_foodBurnTime / 60));
-                    _sb.AppendFormat("\n$item_food_regen: <color=#ffa500ff>{0} hp/tick</color>", _item.m_shared.m_foodRegen);
-                }
-
-                string statusEffectTooltip = _item.GetStatusEffectTooltip(qualityLevel, skillLevel);
-                if (statusEffectTooltip.Length > 0)
-                {
-                    _sb.Append("\n\n");
-                    _sb.Append(statusEffectTooltip);
-                }
-
+                FoodStats(_item, localPlayer);
                 break;
             }
             case ItemDrop.ItemData.ItemType.OneHandedWeapon:
             case ItemDrop.ItemData.ItemType.Bow:
             case ItemDrop.ItemData.ItemType.TwoHandedWeapon:
+            case ItemDrop.ItemData.ItemType.TwoHandedWeaponLeft:
             case ItemDrop.ItemData.ItemType.Torch:
             {
                 _sb.Append(_item.GetDamage(qualityLevel, Game.m_worldLevel).GetTooltipString(_item.m_shared.m_skillType));
+                AttackStats();
                 _sb.AppendFormat("\n$item_knockback: <color=#ffa500ff>{0}</color>", _item.m_shared.m_attackForce);
                 _sb.AppendFormat("\n$item_backstab: <color=#ffa500ff>{0}x</color>", _item.m_shared.m_backstabBonus);
+                TamedOnly();
 
                 _sb.AppendFormat("\n\n$item_blockpower: <color=#ffa500ff>{0}</color> <color=#ffff00ff>({1})</color>", _item.GetBaseBlockPower(qualityLevel), _item.GetBlockPowerTooltip(qualityLevel).ToString("0"));
                 if (_item.m_shared.m_timedBlockBonus > 1f)
@@ -478,18 +587,13 @@ static class BetterTooltip
                     _sb.AppendFormat("\n$item_parrybonus: <color=#ffa500ff>{0}x</color>", _item.m_shared.m_timedBlockBonus);
                 }
 
+                ParryAdrenaline();
+
                 string projectileTooltip = _item.GetProjectileTooltip(qualityLevel);
                 if (projectileTooltip.Length > 0)
                 {
                     _sb.Append("\n\n");
                     _sb.Append(projectileTooltip);
-                }
-
-                string statusEffectTooltip2 = _item.GetStatusEffectTooltip(qualityLevel, skillLevel);
-                if (statusEffectTooltip2.Length > 0)
-                {
-                    _sb.Append("\n\n");
-                    _sb.Append(statusEffectTooltip2);
                 }
 
                 _sb.Append("\n");
@@ -501,8 +605,10 @@ static class BetterTooltip
                 {
                     _sb.AppendFormat("\n$item_deflection: <color=#ffa500ff>{0}</color>", _item.GetDeflectionForce(qualityLevel));
                     _sb.AppendFormat("\n$item_parrybonus: <color=#ffa500ff>{0}x</color>", _item.m_shared.m_timedBlockBonus);
-                    _sb.Append("\n");
                 }
+
+                ParryAdrenaline();
+                _sb.Append("\n");
 
                 break;
             case ItemDrop.ItemData.ItemType.Helmet:
@@ -511,23 +617,10 @@ static class BetterTooltip
             case ItemDrop.ItemData.ItemType.Shoulder:
             {
                 _sb.AppendFormat("\n$item_armor: <color=#ffa500ff>{0}</color>", _item.GetArmor(qualityLevel, Game.m_worldLevel));
-                /*
-                string damageModifiersTooltipString = SE_Stats.GetDamageModifiersTooltipString(_item.m_shared.m_damageModifiers);
-                if (damageModifiersTooltipString.Length > 0)
-                {
-                  _sb.Append(damageModifiersTooltipString);
-                }
-                */
-                string statusEffectTooltip3 = _item.GetStatusEffectTooltip(qualityLevel, skillLevel);
-                if (statusEffectTooltip3.Length > 0)
-                {
-                    _sb.Append("\n\n");
-                    _sb.Append(statusEffectTooltip3);
-                }
-
                 break;
             }
             case ItemDrop.ItemData.ItemType.Ammo:
+            case ItemDrop.ItemData.ItemType.AmmoNonEquipable:
                 _sb.Append(_item.GetDamage(qualityLevel, Game.m_worldLevel).GetTooltipString(_item.m_shared.m_skillType));
                 _sb.AppendFormat("\n$item_knockback: <color=#ffa500ff>{0}</color>", _item.m_shared.m_attackForce);
                 break;
@@ -572,6 +665,12 @@ static class BetterTooltip
         */
         string setSize = $"$item_seteffect ({_item.m_shared.m_setSize})";
         _sb.AppendFormat("\n\n<color=#c0c0c0ff>{0}</color>", setSize);
+
+        if (_item.m_shared.m_setStatusEffect != null)
+        {
+            _sb.AppendFormat("\n<color=#ffa500ff>{0}</color>", _item.m_shared.m_setStatusEffect.m_name);
+        }
+
         _sb.AppendFormat("\n<color=#ffa500ff>{0}</color>", effectText);
     }
 
@@ -580,7 +679,7 @@ static class BetterTooltip
         _sb.Append("\n<color=#ff0000ff>$item_noteleport</color>");
     }
 
-    private static void UpgradeStats(Player localPlayer)
+    private static void UpgradeStats()
     {
         int newQuality = _quality;
         int oldQuality = _quality - 1;
@@ -590,6 +689,7 @@ static class BetterTooltip
             case ItemDrop.ItemData.ItemType.OneHandedWeapon:
             case ItemDrop.ItemData.ItemType.Bow:
             case ItemDrop.ItemData.ItemType.TwoHandedWeapon:
+            case ItemDrop.ItemData.ItemType.TwoHandedWeaponLeft:
             case ItemDrop.ItemData.ItemType.Torch:
             {
                 if (_item.GetDamage(newQuality, Game.m_worldLevel).GetTotalDamage() > _item.GetDamage(oldQuality, Game.m_worldLevel).GetTotalDamage())
@@ -601,8 +701,10 @@ static class BetterTooltip
                     _sb.Append(_item.GetDamage(newQuality, Game.m_worldLevel).GetTooltipString(_item.m_shared.m_skillType));
                 }
 
+                AttackStats();
                 _sb.AppendFormat("\n$item_knockback: <color=#ffa500ff>{0}</color>", _item.m_shared.m_attackForce);
                 _sb.AppendFormat("\n$item_backstab: <color=#ffa500ff>{0}x</color>", _item.m_shared.m_backstabBonus);
+                TamedOnly();
 
                 if (_item.GetBaseBlockPower(newQuality) > _item.GetBaseBlockPower(oldQuality))
                 {
@@ -627,18 +729,13 @@ static class BetterTooltip
                     _sb.AppendFormat("\n$item_parrybonus: <color=#ffa500ff>{0}x</color>", _item.m_shared.m_timedBlockBonus);
                 }
 
+                ParryAdrenaline();
+
                 string projectileTooltip = _item.GetProjectileTooltip(newQuality);
                 if (projectileTooltip.Length > 0)
                 {
                     _sb.Append("\n\n");
                     _sb.Append(projectileTooltip);
-                }
-
-                string statusEffectTooltip2 = _item.GetStatusEffectTooltip(newQuality, localPlayer.GetSkillLevel(_item.m_shared.m_skillType));
-                if (statusEffectTooltip2.Length > 0)
-                {
-                    _sb.Append("\n\n");
-                    _sb.Append(statusEffectTooltip2);
                 }
 
                 _sb.Append("\n");
@@ -666,8 +763,10 @@ static class BetterTooltip
                     }
 
                     _sb.AppendFormat("\n$item_parrybonus: <color=#ffa500ff>{0}x</color>", _item.m_shared.m_timedBlockBonus);
-                    _sb.Append("\n");
                 }
+
+                ParryAdrenaline();
+                _sb.Append("\n");
 
                 break;
             case ItemDrop.ItemData.ItemType.Helmet:
@@ -691,16 +790,10 @@ static class BetterTooltip
                   _sb.Append(damageModifiersTooltipString);
                 }
                 */
-                string statusEffectTooltip3 = _item.GetStatusEffectTooltip(newQuality, localPlayer.GetSkillLevel(_item.m_shared.m_skillType));
-                if (statusEffectTooltip3.Length > 0)
-                {
-                    _sb.Append("\n\n");
-                    _sb.Append(statusEffectTooltip3);
-                }
-
                 break;
             }
             case ItemDrop.ItemData.ItemType.Ammo:
+            case ItemDrop.ItemData.ItemType.AmmoNonEquipable:
                 _sb.Append(_item.GetDamage(newQuality, Game.m_worldLevel).GetTooltipString(_item.m_shared.m_skillType));
                 _sb.AppendFormat("\n$item_knockback: <color=#ffa500ff>{0}</color>", _item.m_shared.m_attackForce);
                 break;
@@ -714,7 +807,14 @@ static class BetterTooltip
 
     private static void Weight()
     {
-        _sb.AppendFormat("\n\n$item_weight: <color=#ffa500ff>{0}</color>", _item.GetWeight().ToString("F1"));
+        if (_item.m_shared.m_maxStackSize > 1)
+        {
+            _sb.AppendFormat("\n\n$item_weight: <color=#ffa500ff>{0} ({1} $item_total)</color>", _item.GetNonStackedWeight().ToString("F1"), _item.GetWeight().ToString("F1"));
+        }
+        else
+        {
+            _sb.AppendFormat("\n\n$item_weight: <color=#ffa500ff>{0}</color>", _item.GetWeight().ToString("F1"));
+        }
     }
 
     private static void WieldType()
@@ -766,19 +866,64 @@ static class BetterTooltip
 
         if (_item.m_crafterID != 0L) Crafted();
 
-        return _sb.ToString();
+        // items like the fishing bait boxes tack a second item onto their tooltip
+        ItemDrop.ItemData appendItem = _item.m_shared.m_appendToolTip != null ? _item.m_shared.m_appendToolTip.m_itemData : null;
+        bool appendFullTooltip = appendItem != null && !FoodStats(appendItem, localPlayer);
+
+        string tooltip = _sb.ToString();
+
+        return appendFullTooltip ? $"{tooltip}\n\n{Create(appendItem, qualityLevel, crafting)}" : tooltip;
+    }
+
+    private static void Header()
+    {
+        if (_item.m_shared.m_dlc.Length > 0) DLC();
+        if (_item.m_worldLevel > 0) NewGamePlus();
+        if (_item.m_shared.m_subtitle.Length > 0) Subtitle();
+
+        WieldType();
+
+        if (!_item.m_shared.m_teleportable && (ZoneSystem.instance == null || !ZoneSystem.instance.GetGlobalKey(GlobalKeys.TeleportAll))) Teleport();
+        if (_item.m_shared.m_value > 0) Value();
+        if (_item.m_shared.m_maxQuality > 1 && !_crafting) Quality(_quality);
+    }
+
+    // everything that applies to any item type, no matter how its stats were rendered
+    private static void Footer(Player localPlayer)
+    {
+        float skillLevel = localPlayer != null ? localPlayer.GetSkillLevel(_item.m_shared.m_skillType) : 0f;
+
+        string statusEffectTooltip = _item.GetStatusEffectTooltip(_quality, skillLevel);
+        if (statusEffectTooltip.Length > 0)
+        {
+            _sb.Append("\n\n");
+            _sb.Append(statusEffectTooltip);
+        }
+
+        string chainTooltip = _item.GetChainTooltip(_quality, skillLevel);
+        if (chainTooltip.Length > 0)
+        {
+            _sb.Append("\n\n");
+            _sb.Append(chainTooltip);
+        }
+
+        EitrRegen(localPlayer);
+
+        if (localPlayer != null) localPlayer.AppendEquipmentModifierTooltips(_item, _sb);
+
+        DamageModifiers();
+
+        string setStatusEffectTooltip = _item.GetSetStatusEffectTooltip(_quality, skillLevel);
+        if (setStatusEffectTooltip.Length > 0) StatusEffect(setStatusEffectTooltip);
+
+        FullAdrenaline();
     }
 
     private static void BasicTooltip(Player localPlayer, bool isMax = false)
     {
-        if (_item.m_shared.m_dlc.Length > 0) DLC();
+        Header();
 
-        WieldType();
-
-        if (!_item.m_shared.m_teleportable) Teleport();
-        if (_item.m_shared.m_value > 0) Value();
-
-        ItemType(_quality, localPlayer.m_skills.GetSkillLevel(_item.m_shared.m_skillType));
+        ItemType(_quality, localPlayer);
 
         if (_item.m_shared.m_useDurability)
         {
@@ -789,13 +934,7 @@ static class BetterTooltip
             _sb.Append("\n");
         }
 
-        localPlayer.AppendEquipmentModifierTooltips(_item, _sb);
-
-
-        DamageModifiers();
-
-        string setStatusEffectTooltip = _item.GetSetStatusEffectTooltip(_quality, localPlayer.GetSkillLevel(_item.m_shared.m_skillType));
-        if (setStatusEffectTooltip.Length > 0) StatusEffect(setStatusEffectTooltip);
+        Footer(localPlayer);
     }
 
     private static void CraftingTooltip(Player localPlayer, bool isMax = false)
@@ -808,15 +947,10 @@ static class BetterTooltip
         }
         else
         {
-            if (_item.m_shared.m_dlc.Length > 0) DLC();
-
-            WieldType();
-
-            if (!_item.m_shared.m_teleportable) Teleport();
-            if (_item.m_shared.m_value > 0) Value();
+            Header();
 
             // Your fantastic logic to parse stats.
-            UpgradeStats(localPlayer);
+            UpgradeStats();
 
             if (_item.m_shared.m_useDurability)
             {
@@ -825,15 +959,10 @@ static class BetterTooltip
                 _sb.Append("\n");
             }
 
-            localPlayer.AppendEquipmentModifierTooltips(_item, _sb);
-
-            DamageModifiers();
-
-            string setStatusEffectTooltip = _item.GetSetStatusEffectTooltip(_quality, localPlayer.GetSkillLevel(_item.m_shared.m_skillType));
-            if (setStatusEffectTooltip.Length > 0) StatusEffect(setStatusEffectTooltip);
+            Footer(localPlayer);
         }
 
-        // Ex. 
+        // Ex.
         // Block: 55 -> 60
         // Durability: 1400 -> 1600
     }
