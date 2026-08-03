@@ -373,6 +373,7 @@
     <None Include="GameDir.targets" />
     <None Include="Package\manifest.json" />
     <None Include="Package\README.md" />
+    <None Include="Package\CHANGELOG.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Package\plugins\" />

@@ -1,0 +1,216 @@
+# Changelog
+
+#### 2.5.10
+- Added a custom adrenaline bar, with the same rotation, scaling and HUD editing support as the health, stamina and eitr bars (`customAdrenalineBar`, disabled by default)
+- Restored item tooltip information that the custom tooltip had fallen behind on:
+    - Attack costs: stamina, eitr, health, health return on hit, and bow draw stamina drain
+    - Damage multipliers for missing health
+    - Status effects on utility items, trinkets, tools and other item types that previously showed none
+    - Two handed left and non-equipable ammo item types, which previously showed no stats at all
+    - Chain / spawn on hit effects, eitr regen modifier, full adrenaline effect, parry adrenaline and tamed only
+    - New Game Plus level, item subtitle, quality level, and the name of a set effect
+    - Appended item tooltips, such as the ones used by bait boxes
+    - Food values now include your current maximums, and foods that only give stamina or eitr are no longer skipped
+- Stacked items show both the single and total weight again
+- Items are no longer marked as unteleportable when the server has the teleport all global key set
+- Crafter names are run through the game's UGC filter again
+
+#### 2.5.9
+- Tooltip and skills fixes
+- Boss health bar can be moved and scaled in HUD edit mode (wylker)
+
+#### 2.5.8
+- Update for Valheim 0.220.3
+
+#### 2.5.7
+- Maintenance release
+
+#### 2.5.6
+- Ashlands update
+
+#### 2.5.5
+- Fixed the build count on the character selection screen
+
+#### 2.5.4
+- Update for Valheim 0.217.28
+
+#### 2.5.3
+- Fixed item quality stars
+
+#### 2.5.2
+- Bug fixes
+
+#### 2.5.1
+- Bug fixes
+
+#### 2.5.0
+- Maintenance release
+
+#### 2.4.4
+- Fix for game version 0.217.14 (JuniorAndria)
+
+#### 2.4.3
+- Required updates for Valheim version 0.216.9
+
+#### 2.4.2
+- Fix enemy HUD
+
+#### 2.4.1
+- Resolve inventory related issues (thedefside)
+- Resolve an issue where you could end up with no Food Bar due to conflicting config settings
+- Inventory Tooltip improvements (MetricMike)
+    - Show Eitr increase
+    - Color code food values (red for health, yellow for stamina, blue for eitr)
+    - Include food duration value in minutes
+
+#### 2.4.0
+- Overhauled general scaling and dimension as well as custom bar rotation system (Goldenrevolver):
+    - in addition to being able to rotate the custom bars ingame using the new enum config, you can now also rotate them with the mouse wheel in edit mode while not holding down the modifier key. holding down the modifier key and scrolling still changes the scale for any UI element, but additionally while holding down the modifier key moving the mouse horizontally and vertically now changes the X and Y dimension respectively (X dimension support is completely new)
+    - custom bar text now scales based on Y axis only (that means that the text is no longer distorted when changing only one dimension)
+    - hotbar and inventory icons now scale ingame through new component
+    - improved bar update performance by saving in local variables
+- New features (Goldenrevolver)
+    - added font option for custom bar text and custom food bar duration text
+    - added option for bee hive hover text like fermenter hover text
+    - added option to not show running exp notifications
+- Fix compatibility with ComfyQuickSlots and Odin's QOL (BruceOfTheBow & Goldenrevolver)
+
+#### 2.3.2
+- Added backwards compatibility to older config versions (Goldenrevolver)
+- Fixed having durability color disabled also disabling icon size rescaling (Goldenrevolver)
+
+#### 2.3.0
+- Color of the item movement speed tooltip is now set correctly (Goldenrevolver)
+- The main menu player stats no longer display the kill count if it's zero (Goldenrevolver)
+- The mod no longer always displays 'Lv.0' when the user has character XP disabled (Goldenrevolver)
+- Removed floating food icon next to armor icon (Goldenrevolver)
+- Add Custom Eitr Bar (Goldenrevolver)
+- Enable user to enable or disable the custom health/food/stamina/xp bars without errors (still requires logout/restart) (Goldenrevolver)
+- Change the default position and rotation of custom UI bars so they don't overlap (Goldenrevolver)
+- Fix duplicate food bar when custom health bar disabled (Goldenrevolver)
+
+#### 2.2.3
+- Mistlands Compatibility (thedefside)
+
+#### 2.2.2
+- Fixed ability to move QuickSlotsHotkeyBar from Equipment and Quickslots (Dalayeth)
+- Fixed character stats overlapping with "Cloud Save" (Dalayeth)
+
+#### 2.2.1
+- Added config option to enble showing your own player name/health bar/hp text above your player (redseiko)
+- Performance improvements to the EnemyHud (redseiko)
+- Fixed Custom HUD editing (thedefside)
+- Fixed Custom Skills dialog (thedefside)
+- Don't resize enemy hud heatlh bar if hp text is disabled (thedefside)
+
+#### 2.1.0
+- Re-organized the config file. Renamed some options and updated the descriptions. It is recommended that you back up your existing file, then remove it so a new one is generated
+- Add config setting to enable writing debug messages to the bepinex log
+- Enemy HUD changes:
+    - Add config option to show other player's current and max health numbers in multiplayer
+    - Add config options to adjust the font size of Enemy, Boss, and Player health
+    - Add config option to change the health bar color for tamed creatures from red to green
+    - Add config option to change enemy name color based on alerted status. If disabled vanilla alerted icons show
+    - Fixed enemy level number not showing when enemyLvlStyle set to 1 or 2
+
+#### 2.0.5
+- Fixed an issue where Player couldn't jump after turning Character XP off and XP bar on (thanks to Varek!)
+
+#### 2.0.4
+- Fix Hover text on oven (you must point to the outer shell of the oven to see it)
+- Update most custom HUD settings to default to disabled
+
+#### 2.0.3
+- Fix cooking stations not working (nandryshak)
+- Fix enemy health bars (nandryshak)
+- Fix food bar timer being stuck at default value (phtnk)
+- Add config option to hide _just_ the XP bar on the bottom of the screen
+- Add XP level progress % to Skills dialog window
+
+#### 2.0.2
+- Fixed issues with QuickSlots disappearing
+- Custom elements now use game default rotations.
+
+#### 2.0.1
+- Fixed issues with custom elements
+- Rotate custom elements via config
+- Custom UI support for QuickSlots
+
+#### 2.0.0
+- Revamped config, old config causes issues (suggest deleting old and relaunch game)
+- Ability to edit UI elements positions
+- Added Custom elements (HP Bar, Stamina Bar, Food Bar)
+
+#### 1.6.4
+- Fixed fermenter hover text after game update 0.148.6
+- Skill notifications are ingnored on lvl 100 skills
+- Chest hovertext now has option to show avaible free slots.
+
+#### 1.6.3
+- Container hover text follows original format
+- XP Notification customization (text size, extended information)
+
+#### 1.6.2
+- Fixed issues with enemyHud draw distance defaulting to smaller than game default
+- Skill percentage text is now scaled with skillUITextSize
+
+#### 1.6.1
+- Fixed fishing rod causing skills to crash / losing session progress.
+- Removed decimals from chest percentage.
+
+#### 1.6.0
+- Added custom map pin size (for the 4k gang)
+- More hovertext information (Cooking station, chest)
+- Fixed issue with XP notification caused crashing
+- More modification options on cofig.
+
+#### 1.5.1
+- Fixed Player XP Bar scaling issues on > 16:9 resolutions. Please notify if you still have issues.
+- Added custom hover text on plant & fermenter.
+- Durability now supports Protanopia color palette.
+- Other config edits.
+
+#### 1.5.0
+- Added custom tooltips
+- Updated recipe information. Show clearly what stats are improving when upgrading.
+- Show all active item stats by hovering over your armour amount.
+
+#### 1.4.2
+- Added skillUITextSize to config (Game still scales them)
+- Padding fix on modded items quality stars
+- Ability to toggle if chracter stats are visible
+
+#### 1.4.1
+- Hotfix on config values
+
+#### 1.4.0
+- Added Character Lvls + XP Bar to track progress
+- More options to config
+- Bug fixes on spawned items breaking items UI
+
+#### 1.3.1
+- Fixed durability bars sometime showing as empty
+- Small code optimization
+- Updated Icon & README
+
+#### 1.3.0
+- Added custom enemy hud
+- Editable enemy hud visibility range.
+- Ability to scale item image sizes. _Defaulted to 75% of original size._
+- **Removed First Person Camera** _(There is an seperate mod for that, few updates coming soon.)_
+
+#### 1.2.0
+- Changed item levels to display as stars
+- Added Character stats to character selection screen
+- Minor tweaks on skill UI.
+
+#### 1.1.0
+- Added Colored Durability Bars
+- Added options to disable UI modifications
+- Added config options to edit FPS Toggle and FOV
+
+#### 1.0.1
+- Initial Release under Valheim Mods
+
+#### 1.0.0
+- Initial Release, but went under the wrong section
