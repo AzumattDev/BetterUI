@@ -381,6 +381,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetDir)" "$(GameDir)\BepInEx\plugins\$(ProjectName)\" /q /s /y /i</PostBuildEvent>
-    <PostBuildEvent>xcopy "$(TargetDir)" "C:\Users\crypt\AppData\Roaming\com.kesomannen.gale\valheim\profiles\AzuMods_All\BepInEx\plugins\$(ProjectName)\" /q /s /y /i</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetDir)" "C:\Users\crypt\AppData\Roaming\com.kesomannen.gale\valheim\profiles\OnePointOhTesting\BepInEx\plugins\$(ProjectName)\" /q /s /y /i</PostBuildEvent>
   </PropertyGroup>
 </Project>

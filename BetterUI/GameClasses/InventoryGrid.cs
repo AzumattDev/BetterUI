@@ -7,11 +7,11 @@ namespace BetterUI.GameClasses
     public static class BetterInventoryGrid
     {
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(InventoryGrid), "UpdateGui")]
+        [HarmonyPatch(typeof(InventoryGrid), nameof(InventoryGrid.UpdateGui))]
         private static void PatchInventory(ref InventoryGrid __instance, ref Player player, ItemDrop.ItemData dragItem)
         {
             int width = __instance.m_inventory.GetWidth();
-            InventoryGrid.Element element;
+            InventoryElement element;
             int index;
 
             foreach (ItemDrop.ItemData itemData in __instance.m_inventory.GetAllItems())

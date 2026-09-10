@@ -18,7 +18,7 @@ namespace BetterUI.GameClasses
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(FejdStartup), "UpdateCharacterList")]
+        [HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.UpdateCharacterList))]
         private static void ShowCharacterStats(ref FejdStartup __instance)
         {
             if (Main.showCustomCharInfo.Value)

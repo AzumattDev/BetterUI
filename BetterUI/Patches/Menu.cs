@@ -37,14 +37,19 @@ static class CharacterStats
 
         if (menu.m_profileIndex >= 0 && menu.m_profileIndex < menu.m_profiles.Count)
         {
-            PlayerProfile playerProfile = menu.m_profiles[menu.m_profileIndex];
-            string kills = playerProfile.m_playerStats.m_stats[PlayerStatType.EnemyKills] > 0 ? $"Kills: {playerProfile.m_playerStats.m_stats[PlayerStatType.EnemyKills]}   " : string.Empty;
-            menu.m_csName.text = $"{playerProfile.GetName()}\n<size={fontSize}>{kills}Deaths: {playerProfile.m_playerStats[PlayerStatType.Deaths]}   Crafts: {playerProfile.m_playerStats[PlayerStatType.Crafts]}   Builds: {playerProfile.m_playerStats[PlayerStatType.Builds]}</size>";
-            menu.m_csName.gameObject.SetActive(true);
-            Vector2 startBtnPos = (menu.m_csStartButton.transform as RectTransform).anchoredPosition;
-            menu.m_csName.rectTransform.anchoredPosition = new Vector2(menu.m_csName.rectTransform.anchoredPosition.x, startBtnPos.y + padding);
-            menu.SetupCharacterPreview(playerProfile);
-            return;
+			try
+			{
+				PlayerProfile playerProfile = menu.m_profiles[menu.m_profileIndex];
+				var enemyKillsStat = playerProfile.GetStat(PlayerStatType.EnemyKills);
+				string kills = enemyKillsStat > 0 ? $"Kills: {enemyKillsStat}   " : string.Empty;
+				menu.m_csName.text = $"{playerProfile.GetName()}\n<size={fontSize}>{kills}Deaths: {playerProfile.GetStat(PlayerStatType.Deaths)}   Crafts: {playerProfile.GetStat(PlayerStatType.Crafts)}   Builds: {playerProfile.GetStat(PlayerStatType.Builds)}</size>";
+				menu.m_csName.gameObject.SetActive(true);
+				Vector2 startBtnPos = (menu.m_csStartButton.transform as RectTransform).anchoredPosition;
+				menu.m_csName.rectTransform.anchoredPosition = new Vector2(menu.m_csName.rectTransform.anchoredPosition.x, startBtnPos.y + padding);
+				menu.SetupCharacterPreview(playerProfile);
+			} catch {}
+
+			return;
         }
 
         menu.m_csName.gameObject.SetActive(false);

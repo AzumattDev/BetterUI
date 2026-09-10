@@ -21,7 +21,7 @@ namespace BetterUI
           MODNAME = "BetterUI",
           AUTHOR = "MK",
           GUID = AUTHOR + "_" + MODNAME,
-          VERSION = "2.5.10";
+          VERSION = "2.5.11";
 
         internal static ManualLogSource log;
         internal readonly Harmony harmony;
@@ -285,7 +285,7 @@ namespace BetterUI
             {
                 PrintOrphanedEntries();
             }
-            
+
             this.Logger.LogInfo("BetterUI (Forever Maintained Version) loaded");
         }
 

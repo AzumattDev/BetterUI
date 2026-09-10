@@ -38,7 +38,7 @@ namespace BetterUI.GameClasses
     static class ItemData
     {
       [HarmonyPrefix]
-      [HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetTooltip), new Type[] { typeof(ItemDrop.ItemData), typeof(int), typeof(bool), typeof(float), typeof(int) })]
+      [HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetTooltip), new Type[] { typeof(ItemDrop.ItemData), typeof(int), typeof(bool), typeof(float), typeof(int), typeof(bool) })]
       public static bool PatchTooltip(ref string __result, ItemDrop.ItemData item, int qualityLevel, bool crafting)
       {
         if (!Main.showCustomTooltips.Value || Chainloader.PluginInfos.ContainsKey("randyknapp.mods.epicloot")) return true;

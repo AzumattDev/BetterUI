@@ -128,7 +128,7 @@ static class HoverText
 
             for (int i = 0; i < cookingStation.m_slots.Length; i++)
             {
-                cookingStation.GetSlot(i, out string text, out float num, out CookingStation.Status status);
+                cookingStation.GetSlot(i, out string text, out float num, out CookingStation.Status status, out bool cheated);
                 if (text != "" && text != cookingStation.m_overCookedItem.name)
                 {
                     CookingStation.ItemConversion itemConversion = cookingStation.GetItemConversion(text);

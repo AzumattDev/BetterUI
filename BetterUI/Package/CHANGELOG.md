@@ -1,5 +1,7 @@
 # Changelog
 
+#### 2.5.11
+- Update for 1.0
 #### 2.5.10
 - Added a custom adrenaline bar, with the same rotation, scaling and HUD editing support as the health, stamina and eitr bars (`customAdrenalineBar`, disabled by default)
 - Restored item tooltip information that the custom tooltip had fallen behind on:

@@ -86,7 +86,7 @@ static class Stars
 {
     private static Color starColor = new(1.0f, 0.85882f, 0.23137f, 1.0f);
 
-    public static void Draw(InventoryGrid.Element element, int quality_lvl)
+    public static void Draw(InventoryElement element, int quality_lvl)
     {
         string stars;
         element.m_quality.textWrappingMode = TextWrappingModes.PreserveWhitespaceNoWrap;
@@ -110,7 +110,7 @@ static class Stars
         // Parent size = 64x64, quality size = 20x20, top-right (0,0) -> (-4f,-10f)
         element.m_quality.rectTransform.anchoredPosition = new Vector2(-4f, -6f);
 
-        // TODO: Spawned items might break this, as they could have 99 stars. 
+        // TODO: Spawned items might break this, as they could have 99 stars.
         // Possible fix, after x amount switch to: ★x[amount] = ★x99
     }
 
