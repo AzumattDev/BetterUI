@@ -1,21 +1,49 @@
 [<p align="center"><img width="600" src="https://i.imgur.com/uo5x73K.png"></p>](https://valheim.thunderstore.io/package/BetterUI_ForeverMaintained/BetterUI_ForeverMaintained/)
 
 # BetterUI: Forever Maintained for Valheim
-This mod updates the game UI with few subtle edits.  
-You are able to edit and select what updates you want to use. 
+This mod updates the game UI with few subtle edits.
+You are able to edit and select what updates you want to use.
 
 
 # Support
 
 ### Azumatt
 
-`DISCORD:` Azumatt#2625
+`DISCORD:` azumatt
 
 `STEAM:` https://steamcommunity.com/id/azumatt/
 
-For Questions or Comments, find me in my discord:
+For questions or comments, find me in the Hexium, Odin Plus Team Discord or in my own:
 
-<a href="https://discord.gg/pdHgy6Bsng"><img src="https://i.imgur.com/Xlcbmm9.png" href="https://discord.gg/pdHgy6Bsng" width="175" height="175"></a>
+<table width="100%">
+  <tr>
+    <td align="center">
+      <a href="https://hexium.gg">
+        <img
+          src="https://hexium.gg/assets/Logo.png"
+          alt="Hexium"
+          width="64"/>
+      </a>
+    </td>
+
+<td align="center">
+      <a href="https://discord.gg/Pb6bVMnFb2">
+        <img
+          src="https://i.imgur.com/XXP6HCU.png"
+          alt="Odin Plus Discord"
+          width="64"/>
+      </a>
+    </td>
+<td align="center">
+      <a href="https://discord.gg/pdHgy6Bsng">
+        <img
+          src="https://i.imgur.com/Xlcbmm9.png"
+          alt="Azumatt's Discord"
+          width="64"/>
+      </a>
+    </td>
+  </tr>
+</table>
 
 ## Features
 
@@ -64,10 +92,10 @@ Full Changelog can be found on the wiki tab for this mod here: [https://valheim.
 
 ## Installation
 
-#### r2Modman (recommended)
-  1. Install [r2modman](https://valheim.thunderstore.io/package/ebkr/r2modman/)
-  2. Create a new profile
-  3. Select 'Online' from the left nav
+#### Gale (recommended)
+  1. Install [Gale](https://hexium.gg/mod-manager)
+  2. Create a new profile or use the Default
+  3. Select 'Online' from the left nav (house with magnifying glass)
   4. Search for 'BetterUI' and download
   5. Click 'Start Modded'
 
@@ -85,26 +113,26 @@ __How can I see the Epic Loot info when I hover over an item in my iventory?__
 __When I use the config manager to change the config values, nothing happens. Why not?__
  - Some config values are not loaded in real time. You must log out and log back in to see the changes.
 
-__Can I hide the Yellow XP Bar at the bottom of the screen?__  
- - Yes you can. Check config for `showCharacterXPBar` and set it to `false`  
+__Can I hide the Yellow XP Bar at the bottom of the screen?__
+ - Yes you can. Check config for `showCharacterXPBar` and set it to `false`
 
 __Why are the star icons not showing on enemies anymore?__
- - If you want the stars back, edit _enemyLvlStyle_ in the config.  
+ - If you want the stars back, edit _enemyLvlStyle_ in the config.
     - DefaultStars = vanilla stars only
     - PrefixLevelNumber = level number before name (Lvl 1 Greydwarf) with no stars
     - Both = stars & prefix
 
-__How to turn off a specific hover text edit?__  
- - You want to set the specific hover text option to Disabled.  
+__How to turn off a specific hover text edit?__
+ - You want to set the specific hover text option to Disabled.
  - Example: _timeLeftStyleFermenter = Disabled_
 
-__How do I edit the player HUD?__  
+__How do I edit the player HUD?__
  - Press `ESC` to unlock cursor
- - `F7` | Toggle editing mode  
- - `Mouse Left` | Hold to Drag elements  
+ - `F7` | Toggle editing mode
+ - `Mouse Left` | Hold to Drag elements
  - `Mouse Right` | Toggle editing layer
  - `Mouse Left` + `Mouse Wheel` | Hold and scroll to Rotate Custom Bar
- - `Left Ctrl` + `Mouse Left` + `Mouse Wheel` | Hold to scale width and height equally  
+ - `Left Ctrl` + `Mouse Left` + `Mouse Wheel` | Hold to scale width and height equally
  - `Left Ctrl` + `Mouse Left` + Drag pointer left/right | Scale width
  - `Left Ctrl` + `Mouse Left` + Drag pointer up/down | Scale height
 
@@ -124,4 +152,3 @@ __How do I edit the player HUD?__
   - phtnk
   - FelixReuthlinger
   - JuniorAndria
- 

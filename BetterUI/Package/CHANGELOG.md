@@ -1,5 +1,7 @@
 # Changelog
 
+#### 2.5.12
+- Update README because Thunderstore still doesn't let me do this live.
 #### 2.5.11
 - Update for 1.0
 #### 2.5.10
